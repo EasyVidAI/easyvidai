@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Easy Video AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #080812;
+      color: #ffffff;
+    }
+
+    header {
+      width: 100%;
+      padding: 18px 6%;
+      border-bottom: 1px solid #1d1d2b;
+      background: #0b0b16;
+    }
+
+    .header-inner {
+      max-width: 1050px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .logo-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #8b5cf6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .logo span {
+      color: #8b5cf6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 70px 20px 45px;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 7vw, 68px);
+      line-height: 1.05;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: #8b5cf6;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: auto;
+      color: #a5a5b5;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .generator {
+      background: #10101c;
+      border: 1px solid #252537;
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px auto 70px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .section-description {
+      color: #9292a4;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #d7d7e2;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      padding: 16px;
+      border: 1px solid #303044;
+      border-radius: 12px;
+      background: #080812;
+      color: #ffffff;
+      outline: none;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+
+    textarea:focus,
+    select:focus {
+      border-color: #8b5cf6;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .option-group select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #303044;
+      background: #080812;
+      color: #ffffff;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .generate-button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      background: #8b5cf6;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .generate-button:hover {
+      background: #7c3aed;
+      transform: translateY(-1px);
+    }
+
+    .generate-button:disabled {
+      background: #4a4163;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #status {
+      min-height: 25px;
+      margin-top: 18px;
+      text-align: center;
+      color: #aaaabd;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .preview-box {
+      margin-top: 25px;
+      padding: 20px;
+      border: 1px solid #252537;
+      border-radius: 15px;
+      background: #080812;
+      display: none;
+    }
+
+    .preview-box h3 {
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    #videoPlayer {
+      width: 100%;
+      max-height: 600px;
+      border-radius: 12px;
+      background: #000000;
+      display: block;
+    }
+
+    .download-button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #080812;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .download-button:hover {
+      background: #dddddd;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid #1d1d2b;
+      color: #777789;
+      font-size: 14px;
+    }
+
+    .support {
+      margin-top: 8px;
+    }
+
+    .support a {
+      color: #9b7af7;
+      text-decoration: none;
+    }
+
+    .support a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding-top: 50px;
+      }
+
+      .generator {
+        padding: 20px;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-inner">
+
+      <div class="logo">
+        <div class="logo-mark">E</div>
+        <div>
+          Easy <span>Video AI</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <section class="hero">
+
+      <h1>
+        Turn Your Ideas<br>
+        Into <span>Videos</span>
+      </h1>
+
+      <p>
+        Create AI-generated videos from simple text prompts.
+        Enter your idea, choose your settings, and let Easy Video AI
+        bring your imagination to life.
+      </p>
+
+    </section>
+
+
+    <section class="container">
+
+      <div class="generator">
+
+        <div class="section-title">
+          Create a Video
+        </div>
+
+        <div class="section-description">
+          Describe the video you want to generate.
+        </div>
+
+
+        <label for="prompt">
+          Video Prompt
+        </label>
+
+        <textarea
+          id="prompt"
+          placeholder="Example: A cinematic sunset over a beautiful ocean, gentle waves, realistic lighting."
+        ></textarea>
+
+
+        <div class="options">
+
+          <div class="option-group">
+
+            <label for="duration">
+              Duration
+            </label>
+
+            <select id="duration">
+
+              <option value="2">
+                2 seconds
+              </option>
+
+              <option value="3">
+                3 seconds
+              </option>
+
+              <option value="4">
+                4 seconds
+              </option>
+
+              <option value="5" selected>
+                5 seconds
+              </option>
+
+              <option value="6">
+                6 seconds
+              </option>
+
+              <option value="7">
+                7 seconds
+              </option>
+
+              <option value="8">
+                8 seconds
+              </option>
+
+              <option value="9">
+                9 seconds
+              </option>
+
+              <option value="10">
+                10 seconds
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="option-group">
+
+            <label for="ratio">
+              Aspect Ratio
+            </label>
+
+            <select id="ratio">
+
+              <option value="1280:720" selected>
+                16:9 Landscape
+              </option>
+
+              <option value="720:1280">
+                9:16 Portrait
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="option-group">
+
+            <label for="style">
+              Video Style
+            </label>
+
+            <select id="style">
+
+              <option value="Cinematic">
+                Cinematic
+              </option>
+
+              <option value="Realistic">
+                Realistic
+              </option>
+
+              <option value="Animation">
+                Animation
+              </option>
+
+              <option value="3D">
+                3D
+              </option>
+
+              <option value="Cartoon">
+                Cartoon
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="generateButton"
+          class="generate-button"
+          type="button"
+          onclick="generateVideo()"
+        >
+          Generate Video
+        </button>
+
+
+        <div id="status"></div>
+
+
+        <div id="preview" class="preview-box">
+
+          <h3>
+            Generated Video
+          </h3>
+
+          <video
+            id="videoPlayer"
+            controls
+            playsinline
+          ></video>
+
+          <a
+            id="downloadButton"
+            class="download-button"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          >
+            Download Video
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+
+    <div>
+      © 2026 Easy Video AI. All rights reserved.
+    </div>
+
+    <div class="support">
+      Support:
+      <a href="mailto:supporteasyvidai@gmail.com">
+        supporteasyvidai@gmail.com
+      </a>
+    </div>
+
+  </footer>
+
+
+  <script>
+
+    async function generateVideo() {
+
+      const promptElement =
+        document.getElementById("prompt");
+
+      const durationElement =
+        document.getElementById("duration");
+
+      const ratioElement =
+        document.getElementById("ratio");
+
+      const styleElement =
+        document.getElementById("style");
+
+      const button =
+        document.getElementById("generateButton");
+
+      const status =
+        document.getElementById("status");
+
+      const preview =
+        document.getElementById("preview");
+
+      const videoPlayer =
+        document.getElementById("videoPlayer");
+
+      const downloadButton =
+        document.getElementById("downloadButton");
+
+
+      const prompt =
+        promptElement.value.trim();
+
+      const duration =
+        Number(durationElement.value);
+
+      const ratio =
+        ratioElement.value;
+
+      const style =
+        styleElement.value;
+
+
+      if (!prompt) {
+
+        status.textContent =
+          "Please enter a video prompt.";
+
+        promptElement.focus();
+
+        return;
+      }
+
+
+      if (!Number.isInteger(duration) ||
+          duration < 2 ||
+          duration > 10) {
+
+        status.textContent =
+          "Please select a duration between 2 and 10 seconds.";
+
+        return;
+      }
+
+
+      if (
+        ratio !== "1280:720" &&
+        ratio !== "720:1280"
+      ) {
+
+        status.textContent =
+          "Please select a supported aspect ratio.";
+
+        return;
+      }
+
+
+      button.disabled = true;
+
+      button.textContent =
+        "Generating Video...";
+
+      status.textContent =
+        "Your video is being generated. Please wait.";
+
+      preview.style.display =
+        "none";
+
+      videoPlayer.removeAttribute("src");
+
+      videoPlayer.load();
+
+      downloadButton.removeAttribute("href");
+
+
+      try {
+
+        const styledPrompt =
+          `${style} style. ${prompt}`;
+
+
+        const response =
+          await fetch("/api/generate", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+              prompt: styledPrompt,
+
+              duration: duration,
+
+              ratio: ratio
+
+            })
+
+          });
+
+
+        let data;
+
+        try {
+
+          data =
+            await response.json();
+
+        } catch (jsonError) {
+
+          throw new Error(
+            "The server returned an invalid response."
+          );
+
+        }
+
+
+        if (!response.ok || !data.success) {
+
+          throw new Error(
+            data.error ||
+            "Video generation failed."
+          );
+
+        }
+
+
+        if (!data.videoUrl) {
+
+          throw new Error(
+            "No video URL was returned by the server."
+          );
+
+        }
+
+
+        videoPlayer.src =
+          data.videoUrl;
+
+        downloadButton.href =
+          data.videoUrl;
+
+        downloadButton.setAttribute(
+          "download",
+          "easy-video-ai.mp4"
+        );
+
+
+        preview.style.display =
+          "block";
+
+
+        status.textContent =
+          "Video generated successfully!";
+
+
+        videoPlayer.load();
+
+
+      } catch (error) {
+
+        console.error(
+          "Generation error:",
+          error
+        );
+
+
+        status.textContent =
+          "Error: " +
+          (
+            error.message ||
+            "Video generation failed."
+          );
+
+
+        preview.style.display =
+          "none";
+
+      } finally {
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "Generate Video";
+
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
